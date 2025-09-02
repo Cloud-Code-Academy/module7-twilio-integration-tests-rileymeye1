@@ -4,6 +4,16 @@
  */
 @IsTest
 private class TwilioServiceTest {
+
+    @TestSetup
+    static void makeData(){
+        Twilio_API_Setting__mdt twilioAPISettings = new Twilio_API_Setting__mdt();
+        twilioAPISettings.MasterLabel = 'ACTIVE';
+        twilioAPISettings.Account_SID__c = 'fakeId';
+        twilioAPISettings.Auth_Token__c = 'fakeToken';
+        twilioAPISettings.Default_From_Number__c = '+18555920256';
+        twilioAPISettings.Twilio_API_URL__c = 'https://api.twilio.com/2010-04-01/Accounts/';
+    }
     
     /**
      * Test the sendSMS method with a valid request
