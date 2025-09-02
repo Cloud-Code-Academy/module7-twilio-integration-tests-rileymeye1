@@ -1,102 +1,144 @@
-/**
- * TwilioRestApiTest - Test class for TwilioRestApi
- * @see TwilioRestApi
- * 
- * TODO: Implement test methods to verify the functionality of the TwilioRestApi class
- */
 @IsTest
 private class TwilioRestApiTest {
     
     /**
      * Test handleIncomingSMS method with standard SMS parameters
-     * 
-     * TODO: Implement this test method to verify handling of standard SMS webhooks
      */
     @IsTest
     static void testHandleIncomingSMSStandard() {
-        // TODO: Setup mock REST request with standard SMS parameters
-        // - Create RestRequest and RestResponse objects
-        // - Set requestURI (e.g., '/services/apexrest/twilio/sms')
-        // - Set httpMethod to 'POST'
-        // - Add required parameters (MessageSid, AccountSid, From, To, Body, etc.)
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+
+        req.requestURI = '/services/apexrest/twilio/sms';
+        req.httpMethod = 'POST';
+
+        req.addParameter('MessageSid', 'SM1234567890abcdef');
+        req.addParameter('AccountSid', 'AC1234567890abcdef');
+        req.addParameter('MessagingServiceSid', 'MG1234567890abcdef');
+        req.addParameter('From', '+15551234567');
+        req.addParameter('To', '+15559876543');
+        req.addParameter('Body', 'Hello, World!');
         
-        // TODO: Set the mock request/response objects in RestContext
+        RestContext.request = req;
+        RestContext.response = res;
         
-        // TODO: Execute the test
-        // - Call TwilioRestApi.handleIncomingSMS()
+        Test.startTest();
+        String response = TwilioRestApi.handleIncomingSMS();
+        Test.stopTest();
         
-        // TODO: Verify results
-        // - Verify response XML is not null
-        // - Verify response contains expected TwiML elements
+        Assert.isTrue(response != null, 'The response should not be null');
+        Assert.isTrue(response.contains('<Response>'), 'The response should contain an opening <Response> element');
+        Assert.isTrue(response.contains('</Response>'), 'The response should contain a closing </Response> element');
     }
     
     /**
      * Test handleIncomingSMS method with media attachments
-     * 
-     * TODO: Implement this test method to verify handling of SMS with media
      */
     @IsTest
     static void testHandleIncomingSMSWithMedia() {
-        // TODO: Setup mock REST request with media parameters
-        // - Create RestRequest and RestResponse objects
-        // - Set requestURI and httpMethod
-        // - Add required parameters
-        // - Add media attachment parameters (NumMedia, MediaUrl0, MediaContentType0, etc.)
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+
+        req.requestURI = '/services/apexrest/twilio/sms';
+        req.httpMethod = 'POST';
+
+        req.addParameter('MessageSid', 'SM1234567890abcdef');
+        req.addParameter('AccountSid', 'AC1234567890abcdef');
+        req.addParameter('MessagingServiceSid', 'MG1234567890abcdef');
+        req.addParameter('From', '+15551234567');
+        req.addParameter('To', '+15559876543');
+        req.addParameter('Body', 'Hello, World!');
+        req.addParameter('NumMedia', '1');
+        req.addParameter('NumSegments', '1');
+        req.addParameter('MediaUrl0', 'https://example.com/image.jpg');
+        req.addParameter('MediaContentType0', 'image/jpeg');
         
-        // TODO: Set the mock request/response objects in RestContext
+        RestContext.request = req;
+        RestContext.response = res;
         
-        // TODO: Execute the test
-        // - Call TwilioRestApi.handleIncomingSMS()
-        
-        // TODO: Verify results
-        // - Verify response XML is not null
-        // - Verify response contains expected TwiML elements
+        Test.startTest();
+        String response = TwilioRestApi.handleIncomingSMS();
+        Test.stopTest();
+
+        Assert.isTrue(response != null, 'The response should not be null');
+        Assert.isTrue(response.contains('<Response>'), 'The response should contain an opening <Response> element');
+        Assert.isTrue(response.contains('</Response>'), 'The response should contain a closing </Response> element');
     }
     
     /**
      * Test handleIncomingSMS method with location data
-     * 
-     * TODO: Implement this test method to verify handling of SMS with location data
      */
     @IsTest
     static void testHandleIncomingSMSWithLocation() {
-        // TODO: Setup mock REST request with location parameters
-        // - Create RestRequest and RestResponse objects
-        // - Set requestURI and httpMethod
-        // - Add required parameters
-        // - Add location parameters (FromCity, FromState, FromZip, FromCountry, etc.)
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+
+        req.requestURI = '/services/apexrest/twilio/sms';
+        req.httpMethod = 'POST';
+
+        req.addParameter('MessageSid', 'SM1234567890abcdef');
+        req.addParameter('AccountSid', 'AC1234567890abcdef');
+        req.addParameter('MessagingServiceSid', 'MG1234567890abcdef');
+        req.addParameter('From', '+15551234567');
+        req.addParameter('To', '+15559876543');
+        req.addParameter('Body', 'Hello, World!');
+        req.addParameter('FromCity', 'San Francisco');
+        req.addParameter('FromState', 'CA');
+        req.addParameter('FromZip', '94105');
+        req.addParameter('FromCountry', 'US');
+        req.addParameter('ToCity', 'Omaha');
+        req.addParameter('ToState', 'NE');
+        req.addParameter('ToZip', '68110');
+        req.addParameter('ToCountry', 'US');
         
-        // TODO: Set the mock request/response objects in RestContext
+        RestContext.request = req;
+        RestContext.response = res;
         
-        // TODO: Execute the test
-        // - Call TwilioRestApi.handleIncomingSMS()
-        
-        // TODO: Verify results
-        // - Verify response XML is not null
-        // - Verify response contains expected TwiML elements
+        Test.startTest();
+        String response = TwilioRestApi.handleIncomingSMS();
+        Test.stopTest();
+
+        Assert.isTrue(response != null, 'The response should not be null');
+        Assert.isTrue(response.contains('<Response>'), 'The response should contain an opening <Response> element');
+        Assert.isTrue(response.contains('</Response>'), 'The response should contain a closing </Response> element');
     }
     
     /**
      * Test handleIncomingSMS method with WhatsApp parameters
-     * 
-     * TODO: Implement this test method to verify handling of WhatsApp messages
      */
     @IsTest
     static void testHandleIncomingSMSWithWhatsApp() {
-        // TODO: Setup mock REST request with WhatsApp parameters
-        // - Create RestRequest and RestResponse objects
-        // - Set requestURI and httpMethod
-        // - Add required parameters with WhatsApp format (e.g., From: 'whatsapp:+15551234567')
-        // - Add WhatsApp specific parameters (ProfileName, WaId, etc.)
-        // - Add WhatsApp location data if applicable
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+
+        req.requestURI = '/services/apexrest/twilio/sms';
+        req.httpMethod = 'POST';
+
+        req.addParameter('MessageSid', 'SM1234567890abcdef');
+        req.addParameter('AccountSid', 'AC1234567890abcdef');
+        req.addParameter('MessagingServiceSid', 'MG1234567890abcdef');
+        req.addParameter('From', 'whatsapp:+15551234567');
+        req.addParameter('To', 'whatsapp:+15559876543');
+        req.addParameter('Body', 'Hello, World!');
+        req.addParameter('ProfileName', 'John Doe');
+        req.addParameter('WaId', '1234567890');
+        req.addParameter('Forwarded', 'false');
+        req.addParameter('FrequentlyForwarded', 'false');
+        req.addParameter('ButtonText', 'Click Here');
+        req.addParameter('Latitude', '37.7749');
+        req.addParameter('Longitude', '-122.4194');
+        req.addParameter('Address', '1 Market St, San Francisco, CA 94105');
+        req.addParameter('Label', 'San Francisco');
         
-        // TODO: Set the mock request/response objects in RestContext
+        RestContext.request = req;
+        RestContext.response = res;
         
-        // TODO: Execute the test
-        // - Call TwilioRestApi.handleIncomingSMS()
-        
-        // TODO: Verify results
-        // - Verify response XML is not null
-        // - Verify response contains expected TwiML elements
+        Test.startTest();
+        String response = TwilioRestApi.handleIncomingSMS();
+        Test.stopTest();
+
+        Assert.isTrue(response != null, 'The response should not be null');
+        Assert.isTrue(response.contains('<Response>'), 'The response should contain an opening <Response> element');
+        Assert.isTrue(response.contains('</Response>'), 'The response should contain a closing </Response> element');
     }
-} 
+}

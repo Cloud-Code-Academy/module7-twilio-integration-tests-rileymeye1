@@ -3,11 +3,13 @@
  * Handles sending and retrieving SMS messages via Twilio API
  */
 public with sharing class TwilioService {
-    // Constants for Twilio API
-    private static final String ACCOUNT_SID = ''; // TODO: Add your Twilio Account SID
-    private static final String AUTH_TOKEN = ''; // TODO: Add your Twilio Auth Token
-    private static final String DEFAULT_FROM_NUMBER = ''; // TODO: Add your default sender number
-    private static final String TWILIO_API_URL = 'https://api.twilio.com/2010-04-01/Accounts/' + ACCOUNT_SID;
+    // These values are set using the getTwilioSettings() method
+    // Settings are stored in Custom Metadata Type Twilio_API_Setting__mdt
+    private static Boolean settingsRetrieved = false;
+    private static String accountSID;
+    private static String authToken;
+    private static String defaultFromNumber;
+    private static String twilioApiUrl;
 
 
     /**
@@ -18,11 +20,14 @@ public with sharing class TwilioService {
      * @return TwilioResponse containing status and message details
      */
     public static TwilioResponse sendSMS(String toNumber, String messageBody) {
-        
+        if (settingsRetrieved == false) {
+            getTwilioSettings();
+        }
+
         // Prepare request parameters
         Map<String, String> params = new Map<String, String> {
             'To' => toNumber,
-            'From' => DEFAULT_FROM_NUMBER,
+            'From' => defaultFromNumber,
             'Body' => messageBody
         };
         
@@ -36,6 +41,10 @@ public with sharing class TwilioService {
      * @return TwilioResponse containing status and list of messages
      */
     public static TwilioResponse getMessages(Integer pageLimit) {
+        if (settingsRetrieved == false) {
+            getTwilioSettings();
+        }
+
         if (pageLimit == null || pageLimit <= 0) {
             pageLimit = 20;
         }
@@ -47,6 +56,14 @@ public with sharing class TwilioService {
         HttpResponse response = makeHttpRequest('GET', '/Messages.json', params);
         return parseResponse(response);
     }
+
+    private static void getTwilioSettings() {
+        Twilio_API_Setting__mdt twilioAPISettings = Twilio_API_Setting__mdt.getInstance('ACTIVE');
+        accountSID = twilioAPISettings.Account_SID__c;
+        authToken = twilioAPISettings.Auth_Token__c;
+        defaultFromNumber = twilioAPISettings.Default_From_Number__c;
+        twilioApiUrl = twilioAPISettings.Twilio_API_URL__c + accountSID;
+    }
     
     /**
      * Common method to make HTTP requests to Twilio API
@@ -54,12 +71,12 @@ public with sharing class TwilioService {
     private static HttpResponse makeHttpRequest(String method, String endpoint, Map<String, String> params) {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(TWILIO_API_URL + endpoint);
+        request.setEndpoint(twilioApiUrl + endpoint);
         request.setMethod(method);
         
         // Add Basic Auth header for Twilio authentication
         // Twilio uses HTTP Basic Auth with Account SID as username and Auth Token as password
-        String authString = ACCOUNT_SID + ':' + AUTH_TOKEN;
+        String authString = accountSID + ':' + authToken;
         Blob headerValue = Blob.valueOf(authString);
         String authorizationHeader = 'Basic ' + EncodingUtil.base64Encode(headerValue);
         request.setHeader('Authorization', authorizationHeader);
@@ -126,4 +143,4 @@ public with sharing class TwilioService {
         
         return twilioResponse;
     }
-} 
+}
